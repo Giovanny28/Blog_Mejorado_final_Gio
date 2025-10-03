@@ -2,11 +2,11 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f4f4f9;
+  background: #0D33B3;
 }
 
 header {
-  background: #333;
+  background: #1A66BC;
   color: white;
   text-align: center;
   padding: 1rem;
@@ -47,15 +47,15 @@ h2 {
 }
 
 .comment-form button:hover {
-  background: #555;
+  background: #006600;
 }
 
 .comment-form .btn-delete {
-  background: darkred;
+  background: #7F00B2;
 }
 
 .comment-form .btn-delete:hover {
-  background: red;
+  background: #D86AFF;
 }
 
 .comment {
