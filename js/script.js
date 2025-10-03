@@ -1,77 +1,72 @@
-// 🔑 Contraseña
-const pass = prompt("Introduce la contraseña para acceder al blog:");
+// Cargar comentarios almacenados al iniciar
+window.onload = function() {
+  const comentariosGuardados = JSON.parse(localStorage.getItem('comentarios')) || [];
+  comentariosGuardados.forEach(c => mostrarComentario(c));
+}
+
+let pass = prompt("Introduce la contraseña para acceder al blog:");
 const passwordCorrecta = "5432";
 
 if (pass !== passwordCorrecta) {
-  document.body.innerHTML = "<h1>Acceso denegado ❌</h1>";
+    document.body.innerHTML = "<h1>Acceso denegado ❌</h1>";
 } else {
-  // Cargar comentarios guardados al iniciar
-  window.addEventListener("load", () => {
-    const comentariosGuardados = JSON.parse(localStorage.getItem("comentarios")) || [];
-    comentariosGuardados.forEach(c => mostrarComentario(c));
-  });
+    window.onload = function() {
+        const comentariosGuardados = JSON.parse(localStorage.getItem('comentarios')) || [];
+        comentariosGuardados.forEach(c => mostrarComentario(c));
+    }
 }
 
-// 📌 Agregar comentario
 function agregarComentario() {
-  const nombre = document.getElementById("nombre").value.trim();
-  const mensaje = document.getElementById("mensaje").value.trim();
-  const imagenInput = document.getElementById("imagen");
+  const nombre = document.getElementById('nombre').value.trim();
+  const mensaje = document.getElementById('mensaje').value.trim();
+  const imagenInput = document.getElementById('imagen');
 
   if (!nombre || !mensaje) {
-    alert("Por favor escribe tu nombre y comentario.");
+    alert('Por favor escribe tu nombre y comentario.');
     return;
   }
+
   if (nombre.length < 3) {
-    alert("El nombre debe tener al menos 3 caracteres.");
+    alert('El nombre debe tener al menos 3 caracteres.');
     return;
   }
+
   if (mensaje.length > 200) {
-    alert("El mensaje no puede exceder los 200 caracteres.");
+    alert('El mensaje no puede exceder los 200 caracteres.');
     return;
   }
 
-  const fechaTexto = new Date().toLocaleString();
+  const fecha = new Date();
+  const fechaTexto = fecha.toLocaleString();
   let imagenData = null;
-
-  const comentario = {
-    id: Date.now() + "-" + Math.floor(Math.random() * 1000), // ID único
-    nombre,
-    mensaje,
-    fechaTexto,
-    imagenData
-  };
 
   if (imagenInput.files && imagenInput.files[0]) {
     const lector = new FileReader();
-    lector.onload = function (e) {
-      comentario.imagenData = e.target.result;
-      guardarYMostrar(comentario);
-    };
+    lector.onload = function(e) {
+      imagenData = e.target.result;
+      guardarYMostrar({ nombre, mensaje, fechaTexto, imagenData });
+    }
     lector.readAsDataURL(imagenInput.files[0]);
   } else {
-    guardarYMostrar(comentario);
+    guardarYMostrar({ nombre, mensaje, fechaTexto, imagenData });
   }
 
-  document.getElementById("nombre").value = "";
-  document.getElementById("mensaje").value = "";
-  imagenInput.value = "";
+  document.getElementById('nombre').value = '';
+  document.getElementById('mensaje').value = '';
+  imagenInput.value = '';
 }
 
-// 📌 Guardar en localStorage y mostrar
 function guardarYMostrar(comentario) {
-  const comentariosGuardados = JSON.parse(localStorage.getItem("comentarios")) || [];
+  const comentariosGuardados = JSON.parse(localStorage.getItem('comentarios')) || [];
   comentariosGuardados.push(comentario);
-  localStorage.setItem("comentarios", JSON.stringify(comentariosGuardados));
+  localStorage.setItem('comentarios', JSON.stringify(comentariosGuardados));
   mostrarComentario(comentario);
 }
 
-// 📌 Mostrar un comentario en pantalla
-function mostrarComentario({ id, nombre, mensaje, fechaTexto, imagenData }) {
-  const comentariosDiv = document.getElementById("comentarios");
-  const comentarioDiv = document.createElement("div");
-  comentarioDiv.classList.add("comment");
-  comentarioDiv.setAttribute("data-id", id); // atributo para localizarlo
+function mostrarComentario({ nombre, mensaje, fechaTexto, imagenData }) {
+  const comentariosDiv = document.getElementById('comentarios');
+  const comentarioDiv = document.createElement('div');
+  comentarioDiv.classList.add('comment');
 
   comentarioDiv.innerHTML = `
     <strong>${nombre}</strong>
@@ -80,80 +75,19 @@ function mostrarComentario({ id, nombre, mensaje, fechaTexto, imagenData }) {
   `;
 
   if (imagenData) {
-    const img = document.createElement("img");
+    const img = document.createElement('img');
     img.src = imagenData;
     comentarioDiv.appendChild(img);
   }
 
-  // 👍 Botón "Me gusta"
-  const likeBtn = document.createElement("button");
-  likeBtn.textContent = "👍 Me gusta";
-  likeBtn.style.marginRight = "8px";
-
-  const likeCount = document.createElement("span");
-  likeCount.id = `likes-${id}`;
-
-  const likesGuardados = JSON.parse(localStorage.getItem("likes")) || {};
-  likeCount.textContent = likesGuardados[id] || 0;
-
-  likeBtn.onclick = function () {
-    let likes = JSON.parse(localStorage.getItem("likes")) || {};
-    let userLiked = localStorage.getItem(`liked-${id}`) === "true";
-
-    if (!likes[id]) likes[id] = 0;
-
-    if (userLiked) {
-      likes[id]--;
-      localStorage.setItem(`liked-${id}`, "false");
-    } else {
-      likes[id]++;
-      localStorage.setItem(`liked-${id}`, "true");
-    }
-
-    localStorage.setItem("likes", JSON.stringify(likes));
-    likeCount.textContent = likes[id];
-  };
-
-  // ❌ Botón eliminar comentario
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "❌ Eliminar";
-  deleteBtn.style.marginLeft = "10px";
-  deleteBtn.onclick = () => borrarComentario(id);
-
-  // Agregar botones al comentario
-  comentarioDiv.appendChild(likeBtn);
-  comentarioDiv.appendChild(likeCount);
-  comentarioDiv.appendChild(deleteBtn);
-
   comentariosDiv.appendChild(comentarioDiv);
 }
 
-// 📌 Borrar comentario específico
-function borrarComentario(id) {
-  if (confirm("¿Seguro que quieres borrar este comentario?")) {
-    // 1. Quitar del DOM
-    const comentarioDiv = document.querySelector(`[data-id="${id}"]`);
-    if (comentarioDiv) comentarioDiv.remove();
-
-    // 2. Quitar de localStorage
-    let comentariosGuardados = JSON.parse(localStorage.getItem("comentarios")) || [];
-    comentariosGuardados = comentariosGuardados.filter(c => c.id !== id);
-    localStorage.setItem("comentarios", JSON.stringify(comentariosGuardados));
-
-    // 3. Quitar likes asociados
-    let likes = JSON.parse(localStorage.getItem("likes")) || {};
-    delete likes[id];
-    localStorage.setItem("likes", JSON.stringify(likes));
-    localStorage.removeItem(`liked-${id}`);
-  }
-}
-
-// 📌 Borrar todos los comentarios
 function borrarComentarios() {
   if (confirm("¿Estás seguro de borrar todos los comentarios?")) {
-    localStorage.removeItem("comentarios");
-    localStorage.removeItem("likes");
-    document.getElementById("comentarios").innerHTML = "<h3>Comentarios</h3>";
+    localStorage.removeItem('comentarios');
+    document.getElementById('comentarios').innerHTML = '<h3>Comentarios</h3>';
   }
 }
+
 
