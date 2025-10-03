@@ -24,7 +24,20 @@ function agregarComentario() { // Función que se ejecuta al hacer clic en "Publ
     alert('Por favor escribe tu nombre y comentario.'); // Muestra alerta si falta información
     return; // Detiene la ejecución de la función
   }
+  // 🔑 VALIDACIÓN DE RESTRICCIONES (Nombre min 3 / Mensaje max 200)
+  
+  // Validación de NOMBRE: mínimo 3 caracteres
+  if (nombre.length < 3) {
+    alert('El nombre debe tener al menos 3 caracteres.');
+    return; // Detiene la función
+  }
 
+  // Validación de MENSAJE: máximo 200 caracteres
+  if (mensaje.length > 200) {
+    alert('El mensaje no puede exceder los 200 caracteres.');
+    return; // Detiene la función
+  }
+  // 🔑 FIN DE VALIDACIÓN
   const fecha = new Date(); // Crea un objeto con la fecha y hora actual
   const fechaTexto = fecha.toLocaleString(); // Convierte la fecha a un formato legible (ej. "01/10/2025, 10:30:00")
   let imagenData = null; // Variable que almacenará la imagen en formato base64 (si existe)
