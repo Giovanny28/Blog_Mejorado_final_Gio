@@ -1,9 +1,10 @@
-// Cargar comentarios almacenados al iniciar
+// Cargar comentarios al iniciar
 window.onload = function() {
   const comentariosGuardados = JSON.parse(localStorage.getItem('comentarios')) || [];
   comentariosGuardados.forEach(c => mostrarComentario(c));
 }
 
+// Contraseña simple
 let pass = prompt("Introduce la contraseña para acceder al blog:");
 const passwordCorrecta = "5432";
 
@@ -44,11 +45,11 @@ function agregarComentario() {
     const lector = new FileReader();
     lector.onload = function(e) {
       imagenData = e.target.result;
-      guardarYMostrar({ nombre, mensaje, fechaTexto, imagenData });
+      guardarYMostrar({ nombre, mensaje, fechaTexto, imagenData, likes: 0 });
     }
     lector.readAsDataURL(imagenInput.files[0]);
   } else {
-    guardarYMostrar({ nombre, mensaje, fechaTexto, imagenData });
+    guardarYMostrar({ nombre, mensaje, fechaTexto, imagenData, likes: 0 });
   }
 
   document.getElementById('nombre').value = '';
@@ -63,7 +64,8 @@ function guardarYMostrar(comentario) {
   mostrarComentario(comentario);
 }
 
-function mostrarComentario({ nombre, mensaje, fechaTexto, imagenData }) {
+function mostrarComentario(comentario) {
+  const { nombre, mensaje, fechaTexto, imagenData, likes } = comentario;
   const comentariosDiv = document.getElementById('comentarios');
   const comentarioDiv = document.createElement('div');
   comentarioDiv.classList.add('comment');
@@ -80,7 +82,43 @@ function mostrarComentario({ nombre, mensaje, fechaTexto, imagenData }) {
     comentarioDiv.appendChild(img);
   }
 
+  // Botón "Me gusta"
+  const likeBtn = document.createElement('button');
+  likeBtn.textContent = `👍 Me gusta (${likes || 0})`;
+  likeBtn.classList.add('btn-like');
+  likeBtn.onclick = function() {
+    comentario.likes = (comentario.likes || 0) + 1;
+    actualizarComentario(comentario);
+    likeBtn.textContent = `👍 Me gusta (${comentario.likes})`;
+  };
+
+  // Botón "Eliminar"
+  const removeBtn = document.createElement('button');
+  removeBtn.textContent = "❌ Eliminar";
+  removeBtn.classList.add('btn-remove');
+  removeBtn.onclick = function() {
+    eliminarComentario(comentario);
+    comentarioDiv.remove();
+  };
+
+  comentarioDiv.appendChild(likeBtn);
+  comentarioDiv.appendChild(removeBtn);
+
   comentariosDiv.appendChild(comentarioDiv);
+}
+
+function actualizarComentario(comentario) {
+  let comentariosGuardados = JSON.parse(localStorage.getItem('comentarios')) || [];
+  comentariosGuardados = comentariosGuardados.map(c => 
+    c.fechaTexto === comentario.fechaTexto && c.nombre === comentario.nombre ? comentario : c
+  );
+  localStorage.setItem('comentarios', JSON.stringify(comentariosGuardados));
+}
+
+function eliminarComentario(comentario) {
+  let comentariosGuardados = JSON.parse(localStorage.getItem('comentarios')) || [];
+  comentariosGuardados = comentariosGuardados.filter(c => !(c.fechaTexto === comentario.fechaTexto && c.nombre === comentario.nombre));
+  localStorage.setItem('comentarios', JSON.stringify(comentariosGuardados));
 }
 
 function borrarComentarios() {
@@ -89,5 +127,4 @@ function borrarComentarios() {
     document.getElementById('comentarios').innerHTML = '<h3>Comentarios</h3>';
   }
 }
-
 
