@@ -6,13 +6,13 @@
   <title>Mini Blog con Comentarios</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="login-active"> <!-- Fondo especial para login -->
+<body class="login-active">
 
   <!-- Pantalla de Login -->
   <div class="login-container" id="login">
     <h2>Acceso al Blog</h2>
     <input type="password" id="password" placeholder="Introduce la contraseña">
-    <button onclick="verificarPassword()">Entrar</button>
+    <button id="btnEntrar">Entrar</button>
     <p id="error" style="color:red; display:none;">❌ Contraseña incorrecta</p>
   </div>
 
@@ -43,11 +43,14 @@
     </main>
   </div>
 
+  <!-- Tu archivo principal con comentarios -->
   <script src="js/script.js"></script>
+
+  <!-- Script para login -->
   <script>
     const passwordCorrecta = "5432"; // 🔑 Cambia aquí tu contraseña
 
-    function verificarPassword() {
+    document.getElementById("btnEntrar").addEventListener("click", function() {
       const pass = document.getElementById("password").value;
       if (pass === passwordCorrecta) {
         document.getElementById("login").style.display = "none";
@@ -56,8 +59,9 @@
       } else {
         document.getElementById("error").style.display = "block";
       }
-    }
+    });
   </script>
 </body>
 </html>
+
 
