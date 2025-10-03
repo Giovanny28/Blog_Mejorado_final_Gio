@@ -1,12 +1,12 @@
 body { /* Estilos generales para toda la página */
-  font-family: Arial, sans-serif; /* Fuente de texto principal */
+  font-family: Papyrus, Papyrus; /* Fuente de texto principal */
   margin: 0; /* Elimina los márgenes por defecto */
   padding: 0; /* Elimina los rellenos por defecto */
-  background: #f4f4f9; /* Color de fondo gris claro */
+  background: #515151; /* Color de fondo gris claro */
 }
 
 header { /* Estilos para el encabezado */
-  background: #333; /* Fondo gris oscuro */
+  background: #56070c; /* Fondo gris oscuro */
   color: white; /* Texto en color blanco */
   text-align: center; /* Centra el texto horizontalmente */
   padding: 1rem; /* Relleno interno de 1 unidad rem */
@@ -14,11 +14,11 @@ header { /* Estilos para el encabezado */
 
 main { /* Estilos para el contenido principal */
   max-width: 800px; /* Ancho máximo de 800px */
-  margin: 20px auto; /* Centra el contenido y deja 20px de margen arriba y abajo */
+  margin: 30px auto; /* Centra el contenido y deja 20px de margen arriba y abajo */
   background: white; /* Fondo blanco */
-  padding: 20px; /* Espaciado interno de 20px */
-  border-radius: 10px; /* Bordes redondeados */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra ligera alrededor */
+  padding: 30px; /* Espaciado interno de 20px */
+  border-radius: 30px; /* Bordes redondeados */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.6); /* Sombra ligera alrededor */
 }
 
 h2 { /* Estilos para subtítulos */
@@ -40,18 +40,18 @@ h2 { /* Estilos para subtítulos */
 }
 
 .comment-form button { /* Estilos específicos para los botones */
-  background: #333; /* Fondo gris oscuro */
+  background: #000099; /* Fondo gris oscuro */
   color: white; /* Texto en blanco */
   border: none; /* Sin borde */
   cursor: pointer; /* El cursor cambia a "mano" al pasar sobre el botón */
 }
 
 .comment-form button:hover { /* Efecto cuando se pasa el ratón sobre el botón */
-  background: #555; /* Cambia a gris más claro */
+  background: #2699E6; /* Cambia a gris más claro */
 }
 
 .comment-form .btn-delete { /* Botón de borrar comentarios */
-  background: darkred; /* Fondo rojo oscuro */
+  background: #de2e03; /* Fondo rojo oscuro */
 }
 
 .comment-form .btn-delete:hover { /* Efecto hover para el botón de borrar */
