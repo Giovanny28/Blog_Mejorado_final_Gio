@@ -71,6 +71,7 @@ function mostrarComentario({ id, nombre, mensaje, fechaTexto, imagenData }) {
   const comentariosDiv = document.getElementById("comentarios");
   const comentarioDiv = document.createElement("div");
   comentarioDiv.classList.add("comment");
+  comentarioDiv.setAttribute("data-id", id); // atributo para localizarlo
 
   comentarioDiv.innerHTML = `
     <strong>${nombre}</strong>
@@ -113,10 +114,38 @@ function mostrarComentario({ id, nombre, mensaje, fechaTexto, imagenData }) {
     likeCount.textContent = likes[id];
   };
 
+  // ❌ Botón eliminar comentario
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "❌ Eliminar";
+  deleteBtn.style.marginLeft = "10px";
+  deleteBtn.onclick = () => borrarComentario(id);
+
+  // Agregar botones al comentario
   comentarioDiv.appendChild(likeBtn);
   comentarioDiv.appendChild(likeCount);
+  comentarioDiv.appendChild(deleteBtn);
 
   comentariosDiv.appendChild(comentarioDiv);
+}
+
+// 📌 Borrar comentario específico
+function borrarComentario(id) {
+  if (confirm("¿Seguro que quieres borrar este comentario?")) {
+    // 1. Quitar del DOM
+    const comentarioDiv = document.querySelector(`[data-id="${id}"]`);
+    if (comentarioDiv) comentarioDiv.remove();
+
+    // 2. Quitar de localStorage
+    let comentariosGuardados = JSON.parse(localStorage.getItem("comentarios")) || [];
+    comentariosGuardados = comentariosGuardados.filter(c => c.id !== id);
+    localStorage.setItem("comentarios", JSON.stringify(comentariosGuardados));
+
+    // 3. Quitar likes asociados
+    let likes = JSON.parse(localStorage.getItem("likes")) || {};
+    delete likes[id];
+    localStorage.setItem("likes", JSON.stringify(likes));
+    localStorage.removeItem(`liked-${id}`);
+  }
 }
 
 // 📌 Borrar todos los comentarios
