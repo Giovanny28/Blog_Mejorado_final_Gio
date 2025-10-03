@@ -6,31 +6,58 @@
   <title>Mini Blog con Comentarios</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-  <header>
-    <h1>Mi Blog de Programación</h1>
-  </header>
-  
-  <main>
-    <article>
-      <h2>Bienvenidos</h2>
-      <p>Este es un blog demostrativo para la clase de Programación Web. Aquí podrán dejar sus comentarios y subir imágenes.</p>
-    </article>
+<body class="login-active"> <!-- Fondo especial para login -->
 
-    <section class="comment-form">
-      <h3>Agregar un comentario</h3>
-      <input type="text" id="nombre" placeholder="Tu nombre" required>
-      <textarea id="mensaje" rows="3" placeholder="Escribe tu comentario" required></textarea>
-      <input type="file" id="imagen" accept="image/*">
-      <button onclick="agregarComentario()">Publicar comentario</button>
-      <button onclick="borrarComentarios()" class="btn-delete">Borrar todos los comentarios</button>
-    </section>
+  <!-- Pantalla de Login -->
+  <div class="login-container" id="login">
+    <h2>Acceso al Blog</h2>
+    <input type="password" id="password" placeholder="Introduce la contraseña">
+    <button onclick="verificarPassword()">Entrar</button>
+    <p id="error" style="color:red; display:none;">❌ Contraseña incorrecta</p>
+  </div>
 
-    <section id="comentarios">
-      <h3>Comentarios</h3>
-    </section>
-  </main>
+  <!-- Contenido del Blog -->
+  <div id="blog" style="display:none;">
+    <header>
+      <h1>Mi Blog de Programación</h1>
+    </header>
+    
+    <main>
+      <article>
+        <h2>Bienvenidos</h2>
+        <p>Este es un blog demostrativo para la clase de Programación Web. Aquí podrán dejar sus comentarios y subir imágenes.</p>
+      </article>
+
+      <section class="comment-form">
+        <h3>Agregar un comentario</h3>
+        <input type="text" id="nombre" placeholder="Tu nombre" required>
+        <textarea id="mensaje" rows="3" placeholder="Escribe tu comentario" required></textarea>
+        <input type="file" id="imagen" accept="image/*">
+        <button onclick="agregarComentario()">Publicar comentario</button>
+        <button onclick="borrarComentarios()" class="btn-delete">Borrar todos los comentarios</button>
+      </section>
+
+      <section id="comentarios">
+        <h3>Comentarios</h3>
+      </section>
+    </main>
+  </div>
 
   <script src="js/script.js"></script>
+  <script>
+    const passwordCorrecta = "5432"; // 🔑 Cambia aquí tu contraseña
+
+    function verificarPassword() {
+      const pass = document.getElementById("password").value;
+      if (pass === passwordCorrecta) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("blog").style.display = "block";
+        document.body.classList.remove("login-active"); 
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    }
+  </script>
 </body>
 </html>
+
