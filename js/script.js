@@ -6,7 +6,7 @@ window.onload = function() {
 
 // Contraseña simple
 let pass = prompt("Introduce la contraseña para acceder al blog:");
-const passwordCorrecta = "5432";
+const passwordCorrecta = "2804";
 
 if (pass !== passwordCorrecta) {
     document.body.innerHTML = "<h1>Acceso denegado ❌</h1>";
